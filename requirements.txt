@@ -1,0 +1,28 @@
+# Data Manipulation & Math
+numpy
+pandas
+pyarrow
+
+# Geospatial & Raster Data Handling (.asc, .tif)
+rasterio
+geopandas
+shapely
+
+# Machine Learning & Modeling
+scikit-learn
+xgboost
+lightgbm
+
+# Visualization
+matplotlib
+seaborn
+
+# Development & Environment
+jupyter
+tqdm
+
+
+ipykernel
+streamlit
+shap
+plotly

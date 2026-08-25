@@ -1,0 +1,17 @@
+# Python & Environment
+.venv/
+__pycache__/
+*.pyc
+
+# Large Data & Models (용량이 크거나 자동 생성되는 파일)
+dataset/raw/*.asc
+dataset/raw/*.nc
+dataset/raw/*.gz
+dataset/_temp_asc/*.txt
+dataset/processed/*.parquet
+saved_models/*.joblib
+saved_models/*.pkl
+
+# VS Code & OS
+.vscode
+.DS_Store
