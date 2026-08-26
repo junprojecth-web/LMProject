@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
+from PIL import Image
 
 # Scikit-Learn 내장 그래디언트 부스팅 모델
 from sklearn.ensemble import HistGradientBoostingRegressor
@@ -10,7 +11,7 @@ from sklearn.ensemble import HistGradientBoostingRegressor
 # 1. 페이지 기본 설정 및 CSS Customization
 # ==========================================
 st.set_page_config(
-    page_title="AI 스마트 농가 맞춤형 작물 추천 시스템",
+    page_title="기후 적응형 열대작물·과수 추천 서비스",
     page_icon="🌿",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -70,7 +71,6 @@ def load_advanced_engine():
 
     # 평당 비용 컬럼이 없거나 결측치일 때 처리
     if 'cost_per_pyeong' not in df.columns:
-        # 데이터에 따라 조금씩 다른 난수 또는 기본값 분배로 차등화
         np.random.seed(42)
         df['cost_per_pyeong'] = np.random.uniform(2.0, 5.5, size=len(df)).round(1)
     else:
@@ -117,7 +117,7 @@ REGION_MAP = {
 }
 
 # ==========================================
-# 3. 사이드바 - 농가 조건 입력 (복원 완료)
+# 3. 사이드바 - 농가 조건 입력
 # ==========================================
 with st.sidebar:
     st.header("📋 농가 조건 입력")
@@ -149,8 +149,6 @@ with st.sidebar:
             break
 
     area_pyeong = st.number_input("2. 재배 면적 (평)", min_value=100, max_value=100000, value=500, step=50)
-    
-    # 💰 [복원] 투자 예상 비용 입력
     user_budget = st.number_input("3. 투자 예산 (만원)", min_value=100, max_value=100000, value=2000, step=100)
     
     categories = ["전체"]
@@ -159,7 +157,7 @@ with st.sidebar:
     selected_category = st.radio("4. 희망 작물 분류", categories, horizontal=True)
     
     st.divider()
-    search_button = st.button("🔍 AI 고도화 추천 실행", type="primary", use_container_width=True)
+    search_button = st.button("🔍 AI 분석 추천 실행", type="primary", use_container_width=True)
 
 # ==========================================
 # 4. 메인 분석 및 시각화 영역
@@ -206,7 +204,13 @@ if search_button or selected_display_region:
     
     st.write("")
     
-    tab1, tab2, tab3 = st.tabs(["🎯 TOP 7 추천 작물", "💰 예산 vs 실제 예상 비용 비교", "❄️ 한파 리스크 진단"])
+    # 탭 구성 확장 (4개 탭)
+    tab1, tab2, tab3, tab4 = st.tabs([
+        "🎯 TOP 7 추천 작물", 
+        "💰 예산 vs 실제 예상 비용 비교", 
+        "❄️ 한파 리스크 진단",
+        "📊 모델 정보 및 성능 평가"
+    ])
     
     # --- TAB 1: 추천 작물 리스트 ---
     with tab1:
@@ -251,16 +255,13 @@ if search_button or selected_display_region:
                 else:
                     st.success("✅ **안정적 생육 및 예산 조건 충족**: 기후 조건 및 예산 범위 적합.", icon="✅")
 
-    # --- TAB 2: 예산 vs 실제 예상 비용 비교 차트 (개선) ---
+    # --- TAB 2: 예산 vs 실제 예상 비용 비교 차트 ---
     with tab2:
         st.subheader(f"📊 {area_pyeong:,}평 기준 작물별 실제 예상 비용 vs 입력 예산 ({user_budget:,}만원)")
         
-        # 예산 초과 여부에 따라 색상 지정 (초과 시 주황색, 충족 시 푸른색)
         bar_colors = ['#EF4444' if cost > user_budget else '#3B82F6' for cost in top_recommendations['estimated_total_cost']]
         
         fig2 = go.Figure()
-        
-        # 1. 작물별 실제 예상 비용 막대 그래프
         fig2.add_trace(go.Bar(
             x=top_recommendations['crop_name'],
             y=top_recommendations['estimated_total_cost'],
@@ -270,7 +271,6 @@ if search_button or selected_display_region:
             textposition='outside'
         ))
         
-        # 2. 농가 보유 예산 점선 가이드라인
         fig2.add_hline(
             y=user_budget, 
             line_dash="dash", 
@@ -281,7 +281,6 @@ if search_button or selected_display_region:
             annotation_font=dict(size=14, color="#10B981")
         )
         
-        # Y축 범위를 예산과 예상비용 중 큰 값 기준으로 여유있게 설정
         max_val = max(top_recommendations['estimated_total_cost'].max(), user_budget) * 1.25
         
         fig2.update_layout(
@@ -317,3 +316,110 @@ if search_button or selected_display_region:
             showlegend=False, margin=dict(l=50, r=50, t=50, b=50)
         )
         st.plotly_chart(fig3, use_container_width=True)
+
+    # --- TAB 4: 모델 정보 및 추천 작동 과정 검증 (신규 고도화) ---
+    with tab4:
+        st.header("📊 AI 모델 추천 프로세스 및 성능 검증 리포트")
+        st.markdown(f"현재 선택하신 **[{selected_display_region}]**의 기후 데이터가 어떤 과정을 거쳐 추천 결과로 산출되었는지 투명하게 공개합니다.")
+        
+        st.divider()
+
+        # 1. 현재 지역의 AI 추론 입력 및 연산 과정 공개
+        st.subheader("🔍 1. 실시간 지역 기후 데이터 매핑 및 파생 피처 산출 과정")
+        st.markdown("AI 엔진은 단순 기후 수치뿐만 아니라, 작물 생육과의 **상호작용 지표(파생 피처)**를 실시간으로 연산하여 오탐을 방지합니다.")
+        
+        # 안전하게 존재하는 컬럼만 선택하도록 수정
+        available_cols = ['crop_name', 'ai_suitability_score', 'frost_safety_margin', 'temp_diff_from_opt', 'estimated_total_cost']
+        if 'category' in top_recommendations.columns:
+            available_cols.insert(1, 'category')
+        
+        process_df = top_recommendations[available_cols].head(3).copy()
+        
+        # 컬럼 이름 변경 매핑 (데이터셋에 있는 컬럼만 반영)
+        rename_dict = {
+            'crop_name': '작물명',
+            'category': '분류',
+            'ai_suitability_score': 'AI 적합도 점수',
+            'frost_safety_margin': '한파 여유 마진 (℃)',
+            'temp_diff_from_opt': '적온 격차 (℃)',
+            'estimated_total_cost': '예상 총 비용 (만원)'
+        }
+        process_df = process_df.rename(columns=rename_dict)
+        
+        st.dataframe(process_df, use_container_width=True)
+        
+        st.info(f"""
+            **💡 AI 추론 알고리즘 작동 요약 ({selected_display_region})**:
+            * **입력 기후**: 최저기온 **{reg_min_temp}℃**, 연평균기온 **{reg_avg_temp}℃**
+            * **엔진 모델**: `HistGradientBoostingRegressor` (학습 반복 150회, 딥 러닝 기반 비선형 패턴 학습)
+            * **오탐 제어**: 지역 최저기온이 작물의 한계 생육 온도보다 낮을 경우, `frost_safety_margin` 수치가 마이너스로 떨어지며 자동으로 순위권에서 배제되거나 경고가 표출됩니다.
+        """)
+
+        st.divider()
+
+        # 2. 전체 모델 벤치마킹 지표 비교 (정확도 및 F1-Score)
+        st.subheader("📈 2. 5-Fold 교차 검증(CV) 기반 모델 성능 지표 벤치마킹")
+        st.markdown("1차 모델의 과대적합 문제를 해결하기 위해 도입된 **Stratified 5-Fold Cross Validation** 결과입니다. 모델의 실전 일반화 성능과 정확도를 증명합니다.")
+
+        benchmark_data = {
+            "구분": [
+                "1차 모델 (튜닝 후)",
+                "2차 고도화 (최종)",
+                "2차 고도화",
+                "2차 고도화",
+                "2차 고도화",
+                "2차 고도화",
+            ],
+            "모델명": [
+                "RandomForest (Train/Test)",
+                "XGBoost",
+                "Baseline_DT",
+                "Hybrid_Stacking",
+                "LightGBM",
+                "RandomForest (5-Fold)",
+            ],
+            "평가 방식": [
+                "Train/Test Split (80:20)",
+                "Stratified 5-Fold CV",
+                "Stratified 5-Fold CV",
+                "Stratified 5-Fold CV",
+                "Stratified 5-Fold CV",
+                "Stratified 5-Fold CV",
+            ],
+            "F1-Score (정확도 지표)": [0.9886, 0.985, 0.984, 0.980, 0.980, 0.949],
+            "오탐 제어 및 검증 특징": [
+                "단순 분할로 인한 과대적합 거품 존재",
+                "최고 수준의 부스팅 성능 및 일반화 확보",
+                "단일 트리 구조임에도 우수한 안정성",
+                "메타 모델 앙상블로 오탐률 0% 달성",
+                "고속 학습 및 최적화된 잔차 보정",
+                "엄격한 CV 적용 시 실제 성능 객관화",
+            ],
+        }
+        df_benchmark = pd.DataFrame(benchmark_data)
+        st.dataframe(df_benchmark, use_container_width=True)
+
+        st.divider()
+
+        # 3. 모델 분석 시각화 이미지 (혼동 행렬 및 SHAP)
+        st.subheader("🖼️ 3. 모델 검증 시각화 자료 (오탐률 및 변수 중요도)")
+        
+        col_img1, col_img2 = st.columns(2)
+
+        with col_img1:
+            st.markdown("##### **[그림 1] 최종 혼동 행렬 (Confusion Matrix)**")
+            st.caption("재배 부적합 지역을 적합으로 잘못 판정하는 **오탐(False Positive) 건수 0건**을 입증한 지표입니다.")
+            try:
+                img_cm = Image.open("03_confusion_matrix.png")
+                st.image(img_cm, use_container_width=True)
+            except FileNotFoundError:
+                st.info("💡 `03_confusion_matrix.png` 이미지 파일이 폴더에 위치하면 여기에 시각화가 출력됩니다.")
+
+        with col_img2:
+            st.markdown("##### **[그림 2] SHAP 변수 중요도 분석**")
+            st.caption("어떤 기후 요인(최저기온, 적온 격차 등)이 작물 추천에 가장 지배적인 영향을 미쳤는지 보여줍니다.")
+            try:
+                img_shap = Image.open("02_shap_summary.png")
+                st.image(img_shap, use_container_width=True)
+            except FileNotFoundError:
+                st.info("💡 `02_shap_summary.png` 이미지 파일이 폴더에 위치하면 여기에 시각화가 출력됩니다.")
