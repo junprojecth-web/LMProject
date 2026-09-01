@@ -1,0 +1,15 @@
+﻿feature
+min_temp
+max_temp
+avg_temp
+avg_rhm
+annual_rn
+opt_temp_min
+opt_temp_max
+frost_limit_temp
+opt_humidity
+soil_ph_min
+soil_ph_max
+opt_temp_avg
+temp_diff_from_opt
+frost_safety_margin

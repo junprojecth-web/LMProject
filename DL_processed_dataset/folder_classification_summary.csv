@@ -1,0 +1,57 @@
+﻿dataset,folder_name,state,classification_reason,image_count
+Kaggle2,all,병충해,disease_keyword:mildew,1652
+Kaggle2,all,병충해,disease_keyword:rust,1574
+Kaggle2,all,병충해,disease_keyword:blight,1324
+Kaggle2,all,잎 이상,abnormal_keyword:spot,1228
+Kaggle2,all,기타,no_matching_keyword,1205
+Kaggle2,all,병충해,disease_keyword:rot,923
+Kaggle2,all,병충해,disease_keyword:scab,655
+Kaggle2,all,병충해,disease_keyword:virus,511
+Kaggle2,all,병충해,disease_keyword:bacterial,496
+Kaggle2,all,병충해,disease_keyword:canker,390
+Kaggle2,all,병충해,disease_keyword:septoria,362
+Kaggle2,all,병충해,disease_keyword:disease,324
+Kaggle2,all,병충해,disease_keyword:anthracnose,213
+Kaggle2,all,병충해,disease_keyword:leaf curl,182
+Kaggle2,all,병충해,disease_keyword:alternaria,180
+Kaggle2,all,병충해,disease_keyword:mosaic,117
+Kaggle2,all,잎 이상,abnormal_keyword:scorch,82
+Kaggle2,all,병충해,disease_keyword:gray mold,40
+PlantVillage,Orange___Haunglongbing_(Citrus_greening),기타,no_matching_keyword,16521
+PlantVillage,Tomato___Tomato_Yellow_Leaf_Curl_Virus,병충해,disease_keyword:virus,16071
+PlantVillage,Soybean___healthy,정상,normal_keyword:healthy,15270
+PlantVillage,Peach___Bacterial_spot,병충해,disease_keyword:bacterial,6891
+PlantVillage,Tomato___Bacterial_spot,병충해,disease_keyword:bacterial,6381
+PlantVillage,Tomato___Late_blight,병충해,disease_keyword:blight,5727
+PlantVillage,Squash___Powdery_mildew,병충해,disease_keyword:mildew,5505
+PlantVillage,Tomato___Septoria_leaf_spot,병충해,disease_keyword:septoria,5313
+PlantVillage,Tomato___Spider_mites Two-spotted_spider_mite,병충해,disease_keyword:mite,5028
+PlantVillage,Apple___healthy,정상,normal_keyword:healthy,4935
+PlantVillage,Tomato___healthy,정상,normal_keyword:healthy,4773
+PlantVillage,Blueberry___healthy,정상,normal_keyword:healthy,4506
+PlantVillage,"Pepper,_bell___healthy",정상,normal_keyword:healthy,4434
+PlantVillage,Tomato___Target_Spot,잎 이상,abnormal_keyword:spot,4212
+PlantVillage,Grape___Esca_(Black_Measles),기타,no_matching_keyword,4150
+PlantVillage,Corn_(maize)___Common_rust_,병충해,disease_keyword:rust,3576
+PlantVillage,Grape___Black_rot,병충해,disease_keyword:rot,3540
+PlantVillage,Corn_(maize)___healthy,정상,normal_keyword:healthy,3486
+PlantVillage,Strawberry___Leaf_scorch,잎 이상,abnormal_keyword:scorch,3327
+PlantVillage,Grape___Leaf_blight_(Isariopsis_Leaf_Spot),병충해,disease_keyword:blight,3228
+PlantVillage,Cherry_(including_sour)___Powdery_mildew,병충해,disease_keyword:mildew,3156
+PlantVillage,Potato___Early_blight,병충해,disease_keyword:blight,3000
+PlantVillage,Potato___Late_blight,병충해,disease_keyword:blight,3000
+PlantVillage,Tomato___Early_blight,병충해,disease_keyword:blight,3000
+PlantVillage,"Pepper,_bell___Bacterial_spot",병충해,disease_keyword:bacterial,2991
+PlantVillage,Corn_(maize)___Northern_Leaf_Blight,병충해,disease_keyword:blight,2955
+PlantVillage,Tomato___Leaf_Mold,기타,no_matching_keyword,2856
+PlantVillage,Cherry_(including_sour)___healthy,정상,normal_keyword:healthy,2562
+PlantVillage,Apple___Apple_scab,병충해,disease_keyword:scab,1890
+PlantVillage,Apple___Black_rot,병충해,disease_keyword:rot,1863
+PlantVillage,Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot,잎 이상,abnormal_keyword:spot,1539
+PlantVillage,Strawberry___healthy,정상,normal_keyword:healthy,1368
+PlantVillage,Grape___healthy,정상,normal_keyword:healthy,1269
+PlantVillage,Tomato___Tomato_mosaic_virus,병충해,disease_keyword:virus,1119
+PlantVillage,Raspberry___healthy,정상,normal_keyword:healthy,1113
+PlantVillage,Peach___healthy,정상,normal_keyword:healthy,1080
+PlantVillage,Apple___Cedar_apple_rust,병충해,disease_keyword:rust,825
+PlantVillage,Potato___healthy,정상,normal_keyword:healthy,456
