@@ -15,3 +15,7 @@ saved_models/*.pkl
 # VS Code & OS
 .vscode
 .DS_Store
+
+./model/best_plant_model.pth
+./model/xgboost_crop_recommendation.json
+./dataset/processed_ml_dataset.csv
