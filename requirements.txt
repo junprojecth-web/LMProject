@@ -30,3 +30,8 @@ plotly
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch
 torchvision
+timm
+
+# Deep Learning & Computer Vision Add-ons
+opencv-python-headless
+joblib
